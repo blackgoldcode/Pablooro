@@ -30,6 +30,9 @@ a{color:inherit;text-decoration:none}
 .nav ul a{padding:6px 0;border-bottom:1px solid transparent;transition:.3s}
 .nav ul a:hover{color:var(--ink);border-color:var(--gold)}
 
+.burger{display:none;flex-direction:column;justify-content:center;gap:5px;width:44px;height:44px;padding:11px 8px;background:none;border:none;cursor:pointer}
+.burger span{display:block;height:2px;background:var(--ink);transition:.3s}
+
 /* HERO */
 .hero{min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;gap:30px;padding:120px 24px 80px;
   background:radial-gradient(ellipse at 50% 40%,var(--bg-3) 0%,var(--bg-1) 55%,var(--bg-0) 100%);position:relative}
@@ -106,7 +109,14 @@ footer img{height:60px;opacity:.85;margin-bottom:18px}
 footer .l{font-family:var(--sans);font-size:10px;letter-spacing:.4em;text-transform:uppercase;color:var(--ink-mute)}
 
 @media(max-width:900px){
-  .nav{padding:12px 20px}.nav ul{display:none}
+  .nav{padding:12px 20px;backdrop-filter:none;-webkit-backdrop-filter:none}
+  .burger{display:flex}
+  .nav ul{position:fixed;top:0;left:0;right:0;bottom:0;z-index:-1;flex-direction:column;align-items:center;justify-content:center;gap:26px;
+    background:rgba(10,8,6,.97);font-size:14px;opacity:0;visibility:hidden;transition:.3s}
+  .nav.open ul{opacity:1;visibility:visible}
+  .nav.open .burger span:nth-child(1){transform:translateY(7px) rotate(45deg)}
+  .nav.open .burger span:nth-child(2){opacity:0}
+  .nav.open .burger span:nth-child(3){transform:translateY(-7px) rotate(-45deg)}
   section.s{padding:72px 24px}
   .head{flex-direction:column;align-items:flex-start}.head p{text-align:left}
   .g2,.g3,.split{grid-template-columns:1fr;gap:36px}.split.rev .txt{order:0}
@@ -119,6 +129,7 @@ footer .l{font-family:var(--sans);font-size:10px;letter-spacing:.4em;text-transf
 
 <header class="nav">
   <a href="#inicio"><img src="img/logo_cream.png" alt="Pablo Oro"></a>
+  <button class="burger" id="burger" aria-label="Menú" aria-expanded="false"><span></span><span></span><span></span></button>
   <ul>
     <li><a href="#productos">Instrumentos</a></li>
     <li><a href="#modelos">Modelos</a></li>
@@ -314,6 +325,11 @@ footer .l{font-family:var(--sans);font-size:10px;letter-spacing:.4em;text-transf
 </footer>
 
 <script>
+(function(){
+  var nav=document.querySelector('.nav'),b=document.getElementById('burger');
+  b.addEventListener('click',function(){var o=nav.classList.toggle('open');b.setAttribute('aria-expanded',o);});
+  nav.querySelectorAll('ul a').forEach(function(l){l.addEventListener('click',function(){nav.classList.remove('open');b.setAttribute('aria-expanded',false);});});
+})();
 (function(){
   var ids=['nombre','banda','mail','tel','instrumento','modelo','color'];
   var labels={nombre:'Nombre',banda:'Banda',mail:'Mail',tel:'Teléfono',instrumento:'Instrumento',modelo:'Modelo',color:'Color'};
